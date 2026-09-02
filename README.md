@@ -140,6 +140,3 @@ Automatically attaches JWT tokens to all API requests and handles token expirati
 - Transactions can be filtered by type, category, and date range
 - Charts update automatically when transactions are added/deleted
 
-## License
-
-MIT
