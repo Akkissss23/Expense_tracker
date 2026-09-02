@@ -5,6 +5,18 @@ import axios from '../../api/axios';
 const user = JSON.parse(localStorage.getItem('user'));
 const token = localStorage.getItem('token');
 
+const getAuthErrorMessage = (error, fallback) => {
+    if (error.response?.data?.message) {
+        return error.response.data.message;
+    }
+
+    if (!error.response) {
+        return 'Unable to reach the API. Check the Vercel VITE_API_URL and Render service.';
+    }
+
+    return fallback;
+};
+
 const initialState = {
     user: user || null,
     token: token || null,
@@ -23,7 +35,7 @@ export const register = createAsyncThunk(
             localStorage.setItem('user', JSON.stringify(response.data.data.user));
             return response.data.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || 'Registration failed');
+            return rejectWithValue(getAuthErrorMessage(error, 'Registration failed'));
         }
     }
 );
@@ -37,7 +49,7 @@ export const login = createAsyncThunk(
             localStorage.setItem('user', JSON.stringify(response.data.data.user));
             return response.data.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || 'Login failed');
+            return rejectWithValue(getAuthErrorMessage(error, 'Login failed'));
         }
     }
 );

@@ -101,6 +101,31 @@ npm run dev
 
 The frontend will run on `http://localhost:3000`
 
+## Deploying to Render and Vercel
+
+The backend and frontend are separate deployments. MongoDB Atlas is used as the production database.
+
+### 1. Deploy the backend to Render
+
+1. In Render, create a **Blueprint** from this repository. Render will read the root `render.yaml` file.
+2. Set `MONGO_URI` to your MongoDB Atlas connection string.
+3. Set `FRONTEND_URL` to the final Vercel URL. Multiple comma-separated frontend URLs are supported.
+4. Keep the generated `JWT_SECRET` private. Render supplies `PORT` automatically.
+5. After deployment, verify `https://YOUR-RENDER-SERVICE.onrender.com/api/health` returns a success response.
+
+If you create the service manually instead, use `backend` as the root directory, `npm install` as the build command, and `npm start` as the start command.
+
+### 2. Deploy the frontend to Vercel
+
+1. Import this repository into Vercel.
+2. Set the project root directory to `frontend`.
+3. Vercel detects Vite automatically; use `npm run build` as the build command and `dist` as the output directory.
+4. Add the environment variable `VITE_API_URL` with the full Render API URL, for example:
+    `https://YOUR-RENDER-SERVICE.onrender.com/api`
+5. Deploy, then add the Vercel URL to Render's `FRONTEND_URL` environment variable and redeploy the backend.
+
+The Vercel URL can be opened from both a phone and a computer. Do not use `localhost` in the Vercel environment variable. Never commit `.env` files or production secrets; rotate any database credentials that may have been exposed.
+
 ## API Endpoints
 
 ### Authentication
